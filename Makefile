@@ -26,18 +26,30 @@ TEST_OBJS = $(TEST_SRCS:.c=.o)
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lasm -L./
+
 AS = nasm
-ASFLAGS = -f macho64
+ASFLAGS =
+OS = $(shell uname -s)
+ifeq ($(OS),Linux) # Linux
+	ASFLAGS := -f elf64
+endif
+ifeq ($(OS),Darwin) # Mac
+	ASFLAGS := -f macho64
+endif
+
 AR = ar
 ARFLAGS = -rcs
+
+ARCH = $(shell uname -m)
+ifeq ($(ARCH),arm64) # arm64
+	CC = arch -x86_64 gcc
+	AR = arch -x86_64 ar
+endif
 
 # **************************************************
 # * RULE                                           *
 # **************************************************
 all: $(NAME)
-
-%.o: %.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
 
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
@@ -47,9 +59,11 @@ $(NAME): $(OBJS)
 
 clean:
 	rm -f $(OBJS)
+	rm -f $(TEST_OBJS)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(TEST_NAME)
 
 re:
 	@make fclean
@@ -60,12 +74,9 @@ test:
 	@make $(TEST_NAME)
 
 $(TEST_NAME): $(TEST_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(TEST_OBJS) -o $(TEST_NAME)
-
-tclean:
-	rm -f $(TEST_OBJS) $(TEST_NAME)
+	$(CC) $(CFLAGS) $(TEST_OBJS) -o $(TEST_NAME) $(NAME)
 
 # **************************************************
 # * PHONY                                          *
 # **************************************************
-.PHONY: all clean fclean re test tclean
+.PHONY: all clean fclean re test
