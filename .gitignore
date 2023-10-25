@@ -1,0 +1,10 @@
+# Ctags
+tags
+
+# archive
+*.a
+
+# object
+*.o
+
+*.md
