@@ -42,8 +42,8 @@ ARFLAGS = -rcs
 
 ARCH = $(shell uname -m)
 ifeq ($(ARCH),arm64) # arm64
-	CC = arch -x86_64 gcc
-	AR = arch -x86_64 ar
+	CC := arch -x86_64 gcc
+	AR := arch -x86_64 ar
 endif
 
 # **************************************************
