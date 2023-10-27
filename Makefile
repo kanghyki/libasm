@@ -7,7 +7,12 @@ NAME = libasm.a
 # * SOURCE                                         *
 # **************************************************
 SRC_PATH = ./src
-SRC = my_asm.s
+SRC = ft_read.s\
+			ft_strcmp.s\
+			ft_strcpy.s\
+			ft_strdup.s\
+			ft_strlen.s\
+			ft_write.s
 SRCS = $(addprefix $(SRC_PATH)/, $(SRC))
 OBJS = $(SRCS:.s=.o)
 
@@ -73,7 +78,7 @@ test:
 	@make $(NAME)
 	@make $(TEST_NAME)
 
-$(TEST_NAME): $(TEST_OBJS)
+$(TEST_NAME): $(TEST_OBJS) $(OBJS)
 	$(CC) $(CFLAGS) $(TEST_OBJS) -o $(TEST_NAME) $(NAME)
 
 # **************************************************
