@@ -8,3 +8,5 @@ tags
 *.o
 
 *.md
+
+run_test
