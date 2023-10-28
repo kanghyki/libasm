@@ -1,23 +1,23 @@
-section .text
-  global _ft_strcmp
+  global  _ft_strcmp
 
+  section .text
 _ft_strcmp:
-  mov rcx, 0
-  jmp loop
+  mov     rcx, 0
+  jmp     loop
 
 increase:
-  inc rcx
+  inc     rcx
 
 loop:
-  cmp BYTE [rsi + rcx], 0
-  je  return
+  cmp     BYTE [rsi + rcx], 0
+  je      return
 
 compare:
-  mov dl, BYTE [rdi + rcx]
-  cmp BYTE [rsi + rcx], dl
-  je  increase
+  mov     dl, BYTE [rdi + rcx]
+  cmp     BYTE [rsi + rcx], dl
+  je      increase
 
 return:
-  mov dl, BYTE [rsi + rcx]
-  sub dl, BYTE [rdi + rcx]
+  mov     dl, BYTE [rsi + rcx]
+  sub     dl, BYTE [rdi + rcx]
   ret

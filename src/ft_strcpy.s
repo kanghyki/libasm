@@ -1,24 +1,24 @@
-section .text
-  global _ft_strcpy
+  global  _ft_strcpy
 
+section .text
 _ft_strcpy:
-  mov rcx, 0
-  jmp loop
+  mov     rcx, 0
+  jmp     loop
 
 increase:
-  inc rcx
+  inc     rcx
 
 loop:
-  cmp BYTE [rsi + rcx], 0
-  je  return
+  cmp     BYTE [rsi + rcx], 0
+  je      return
 
 copy:
-  mov dl, BYTE [rsi + rcx]
-  mov BYTE [rdi + rcx], dl
-  jmp increase
+  mov     dl, BYTE [rsi + rcx]
+  mov     BYTE [rdi + rcx], dl
+  jmp     increase
 
 return:
-  mov dl, BYTE [rsi + rcx]
-  mov BYTE [rdi + rcx], dl
-  mov rax, rdi
+  mov     dl, BYTE [rsi + rcx]
+  mov     BYTE [rdi + rcx], dl
+  mov     rax, rdi
   ret
