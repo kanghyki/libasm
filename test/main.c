@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -18,7 +19,7 @@ int main() {
   /*
    * ft_strlen
    */
-  printf("[%s] ", "ft_strlen");
+  printf("[%s]\t", "ft_strlen");
   {
     const char* s1 = "ft_strlen test string";
     const char* s2 = "Hello, world!";
@@ -31,7 +32,7 @@ int main() {
   /*
    * ft_strcpy
    */
-  printf("[%s] ", "ft_strcpy");
+  printf("[%s]\t", "ft_strcpy");
   {
     const char* s1 = "ft_strcpy";
     char buf[500] = {0};
@@ -47,12 +48,13 @@ int main() {
   /*
    * ft_strcmp
    */
-  printf("[%s] ", "ft_strcmp");
+  printf("[%s]\t", "ft_strcmp");
   {
     const char* s1 = "Hello, world!";
     const char* s2 = "Hello, libasm!";
 
-    toBeEqaulNumber(strcmp(s1, s1), ft_strcmp(s1, s1));
+    toBeEqaulNumber(ft_strcmp(s1, s1), 0);
+    toBeEqaulNumber(ft_strcmp("", ""), 0);
     toBeEqaulNumber(strcmp(s1, s2), ft_strcmp(s1, s2));
     toBeEqaulNumber(strcmp(s2, s1), ft_strcmp(s2, s1));
   }
@@ -61,7 +63,7 @@ int main() {
   /*
    * ft_strdup
    */
-  printf("[%s] ", "ft_strdup");
+  printf("[%s]\t", "ft_strdup");
   {
     const char* s1 = "libasm-ft_strdup";
     char* ptr = NULL;
@@ -87,24 +89,31 @@ int main() {
     const char* file_path = "./ft_rw.txt";
 
     /* ft_write */
-    printf("[%s] ", "ft_write");
+    printf("[%s]\t", "ft_write");
     {
+      ssize_t ret;
       int fd = open(file_path, O_WRONLY | O_CREAT, 400);
       if (fd < 0) {
         printf("File open failed\n");
         abort();
       }
-      ssize_t ret = ft_write(fd, s1, strlen(s1));
+      ret = ft_write(fd, s1, strlen(s1));
       toBeEqaulNumber(ret, strlen(s1));
+
+      ret = ft_write(-1, s1, strlen(s1));
+      toBeEqaulNumber(ret, -1);
+      toBeEqaulNumber(errno, EBADF);
 
       /* teardown */
       close(fd);
+      errno = 0;
     }
     printf("OK\n");
 
     /* ft_read */
-    printf("[%s] ", "ft_read");
+    printf("[%s]\t", "ft_read");
     {
+      ssize_t ret;
       char buf[500] = {0};
       int fd = open(file_path, O_RDONLY);
 
@@ -112,14 +121,19 @@ int main() {
         printf("File open failed\n");
         abort();
       }
-      ssize_t ret = ft_read(fd, buf, strlen(s1));
+      ret = ft_read(fd, buf, strlen(s1));
       buf[ret] = 0;
       toBeEqaulString(buf, s1);
       toBeEqaulNumber(ret, strlen(s1));
 
+      ret = ft_read(-1, buf, strlen(s1));
+      toBeEqaulNumber(ret, -1);
+      toBeEqaulNumber(errno, EBADF);
+
       /* teardown */
       close(fd);
       remove(file_path);
+      errno = 0;
     }
     printf("OK\n");
   }
@@ -127,9 +141,9 @@ int main() {
   return 0;
 }
 
-void toBeEqaulNumber(long long t1, long long t2) {
-  if (t1 != t2) {
-    printf("t1: %lld, t2: %lld\n", t1, t2);
+void toBeEqaulNumber(long long n1, long long n2) {
+  if (n1 != n2) {
+    printf("n1: %lld, n2: %lld\t", n1, n2);
     abort();
   }
 }
@@ -139,13 +153,13 @@ void toBeEqaulString(const char* s1, const char* s2) {
   size_t s2_len = strlen(s2);
 
   if (s1_len != s2_len) {
-    printf("s1_len: %ld, s2_len: %ld\n", s1_len, s2_len);
+    printf("s1_len: %ld, s2_len: %ld\t", s1_len, s2_len);
     abort();
   }
 
   for (size_t i = 0; i < s1_len; i++) {
     if (s1[i] != s2[i]) {
-      printf("s1[%ld]: %c, s2[%ld]: %c\n", i, s1[i], i, s2[i]);
+      printf("s1[%ld]: %c, s2[%ld]: %c\t", i, s1[i], i, s2[i]);
       abort();
     }
   }
