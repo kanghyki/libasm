@@ -59,6 +59,9 @@ all: $(NAME)
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(NAME): $(OBJS)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
@@ -79,7 +82,7 @@ test:
 	@make $(TEST_NAME)
 
 $(TEST_NAME): $(TEST_OBJS) $(OBJS)
-	$(CC) $(CFLAGS) $(TEST_OBJS) -o $(TEST_NAME) $(NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(TEST_OBJS) -o $(TEST_NAME)
 
 # **************************************************
 # * PHONY                                          *
