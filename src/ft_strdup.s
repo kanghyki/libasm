@@ -41,4 +41,5 @@ error:
   ret
 
 return:
+  mov     BYTE [rax + rcx], 0
   ret
