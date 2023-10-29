@@ -9,15 +9,18 @@ increase:
   inc     rcx
 
 loop:
-  cmp     BYTE [rsi + rcx], 0
+  mov     r8b, BYTE [rsi + rcx]
+  mov     r9b, BYTE [rdi + rcx]
+  cmp     r8b, r9b
+  jne     return
+  cmp     r8b, 0
   je      return
-
-compare:
-  mov     dl, BYTE [rdi + rcx]
-  cmp     BYTE [rsi + rcx], dl
-  je      increase
+  cmp     r9b, 0
+  je      return
+  jmp     increase
 
 return:
-  mov     dl, BYTE [rsi + rcx]
-  sub     dl, BYTE [rdi + rcx]
+  movzx   rcx, r8b
+  movzx   rax, r9b
+  sub     rax, rcx
   ret
