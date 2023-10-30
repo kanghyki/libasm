@@ -3,6 +3,7 @@
 
   section .text
 _ft_write:
+  push    rdx
   mov     rax, 0x2000004
   syscall
   jnc     return
@@ -14,4 +15,5 @@ error:
   mov     rax, -1
 
 return:
+  pop     rdx
   ret
