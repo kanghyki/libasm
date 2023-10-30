@@ -1,7 +1,8 @@
 # **************************************************
 # * TARGET NAME                                    *
 # **************************************************
-NAME = libasm.a
+LIB_NAME = asm
+NAME = lib$(LIB_NAME).a
 
 # **************************************************
 # * SOURCE                                         *
@@ -30,7 +31,7 @@ TEST_OBJS = $(TEST_SRCS:.c=.o)
 # **************************************************
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = -lasm -L./
+LDFLAGS = -l$(LIB_NAME) -L./
 
 AS = nasm
 ASFLAGS =
